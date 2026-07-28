@@ -1,6 +1,9 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, inject } from '@angular/core';
 import { CourseCardComponent } from '../../ui/course-card/course-card';
 import { Course } from '../../models/course.model';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { CourseService } from '../../services/course.service';
+
 @Component({
   selector: 'app-student-dashboard',
   standalone: true,
@@ -9,6 +12,8 @@ import { Course } from '../../models/course.model';
   imports: [CourseCardComponent],
 })
 export class StudentDashboardComponent {
+  private api = inject(CourseService);
+
   studentName = signal('Liya Kebede');
   earnedCredits = signal(45);
 
@@ -19,6 +24,7 @@ export class StudentDashboardComponent {
   registerForClass() {
     this.earnedCredits.update((c) => c + 3);
   }
+  coursesResource = rxResource({ stream: () => this.api.getAll() });
   selectedCourse = signal<Course | null>(null);
 
   availableCourses = signal<Course[]>([
@@ -55,7 +61,9 @@ export class StudentDashboardComponent {
   handleEnroll(course: Course) {
     if (course.enrollmentCount < course.maxCapacity) {
       this.availableCourses.update((courses) =>
-        courses.map((c) => (c.id === course.id ? { ...c, enrollmentCount: c.enrollmentCount + 1 } : c)),
+        courses.map((c) =>
+          c.id === course.id ? { ...c, enrollmentCount: c.enrollmentCount + 1 } : c,
+        ),
       );
     }
 
