@@ -16,23 +16,22 @@ export class EnrollmentForm {
   private fb = inject(FormBuilder);
   submitted = signal(false);
   form = this.fb.nonNullable.group({
-    studentId: ['', Validators.required, Validators.pattern('^STU-[0-9]{4}$')],
+    studentId: [
+      '',
+      [Validators.required, Validators.pattern('^STU-[0-9]{4}$')],
+    ],
     courseId: ['', Validators.required],
     term: ['Fall 2026', Validators.required],
     notes: [''],
     backupCourses: this.fb.array<FormControl<string>>([]),
   });
 
-  get backupCourses() {
-    return this.form.get('backupCourses') as FormArray<FormControl<string>>;
-  }
-
   get backups() {
-    return this.backupCourses;
+    return this.form.controls.backupCourses;
   }
 
   addBackup() {
-    this.backupCourses.push(
+    this.backups.push(
       this.fb.control('', {
         nonNullable: true,
         validators: Validators.required,
@@ -41,16 +40,16 @@ export class EnrollmentForm {
   }
 
   removeBackup(index: number) {
-    this.backupCourses.removeAt(index);
+    this.backups.removeAt(index);
   }
+
   submit() {
     if (this.form.valid) {
       const payload = this.form.getRawValue();
       console.log('Enrollment payload:', payload);
       this.submitted.set(true);
     } else {
-      console.log('Form is invalid. Please correct the errors.');
-      this.submitted.set(false);
+      this.form.markAllAsTouched();
     }
   }
 }
