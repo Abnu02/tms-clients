@@ -1,7 +1,7 @@
 <h2>Course Enrollment</h2>
 
 @if (submitted()) {
-  <div class="success">Enrollment submitted. Check the console for the payload.</div>
+  <div class="success">✅ Enrollment submitted! Redirecting to the enrollment list…</div>
 } @else {
   <form [formGroup]="form" (ngSubmit)="submit()">
     <label for="studentId">Student ID</label>
@@ -18,7 +18,7 @@
     <input
       id="courseId"
       formControlName="courseId"
-      placeholder="e.g. 1 (TMS course primary key)"
+      placeholder="e.g. CSE-101"
     />
     @if (form.controls.courseId.touched && form.controls.courseId.invalid) {
       <span class="error">Course ID is required</span>
