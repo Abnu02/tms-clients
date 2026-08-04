@@ -19,4 +19,12 @@ describe('InstructorDashboardComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should render the dashboard hero and summary cards', () => {
+    fixture.detectChanges();
+
+    const content = fixture.nativeElement.textContent;
+    expect(content).toContain('Enrollment command center');
+    expect(content).toContain('Total enrollments');
+  });
 });

@@ -2,13 +2,14 @@ import { Component, viewChild, effect, inject } from '@angular/core';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatSortModule, MatSort } from '@angular/material/sort';
+import { RouterLink } from '@angular/router';
 import { EnrollmentStore } from '../../store/enrollment.store';
 import { Enrollment } from '../../models/enrollment.model';
 
 @Component({
   selector: 'app-enrollment-list',
   standalone: true,
-  imports: [MatTableModule, MatPaginatorModule, MatSortModule],
+  imports: [MatTableModule, MatPaginatorModule, MatSortModule, RouterLink],
   templateUrl: './enrollment-list.component.html',
   styleUrl: './enrollment-list.component.scss',
 })

@@ -1,3 +1,40 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.page-description {
+  margin: 0.35rem 0 0;
+  color: #64748b;
+}
+
+.header-links {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.action-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.62rem 0.95rem;
+  border-radius: 999px;
+  background: #2563eb;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.action-link.secondary {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
 table {
   width: 100%;
 }

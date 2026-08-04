@@ -1,10 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { EnrollmentStore } from '../../store/enrollment.store';
 import { AnalyticsChartComponent } from '../../ui/analytics-chart/analytics-chart.component';
 
 @Component({
   selector: 'app-instructor-dashboard',
-  imports: [AnalyticsChartComponent],
+  imports: [AnalyticsChartComponent, RouterLink],
   templateUrl: './instructor-dashboard.component.html',
   styleUrl: './instructor-dashboard.component.scss',
 })

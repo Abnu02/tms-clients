@@ -1,49 +1,73 @@
-<h2>Course Enrollment</h2>
-
-@if (submitted()) {
-  <div class="success">✅ Enrollment submitted! Redirecting to the enrollment list…</div>
-} @else {
-  <form [formGroup]="form" (ngSubmit)="submit()">
-    <label for="studentId">Student ID</label>
-    <input
-      id="studentId"
-      formControlName="studentId"
-      placeholder="e.g. STU-1234"
-    />
-    @if (form.controls.studentId.touched && form.controls.studentId.invalid) {
-      <span class="error">Enter a valid Student ID (format: STU-0000)</span>
-    }
-
-    <label for="courseId">Course ID</label>
-    <input
-      id="courseId"
-      formControlName="courseId"
-      placeholder="e.g. CSE-101"
-    />
-    @if (form.controls.courseId.touched && form.controls.courseId.invalid) {
-      <span class="error">Course ID is required</span>
-    }
-
-    <label for="term">Term</label>
-    <input id="term" formControlName="term" />
-
-    <label for="notes">Notes (optional)</label>
-    <textarea id="notes" formControlName="notes"></textarea>
-
-    <h3>Backup Courses</h3>
-    @for (backup of backups.controls; track $index) {
-      <div class="backup-row">
-        <input
-          [formControl]="backup"
-          [placeholder]="'Backup course ' + ($index + 1)"
-        />
-        <button type="button" (click)="removeBackup($index)">Remove</button>
+<section class="enrollment-page">
+  <div class="enrollment-card">
+    <div class="card-header">
+      <div class="card-title-row">
+        <div>
+          <p class="eyebrow">Enrollment workflow</p>
+          <h2>Course Enrollment</h2>
+          <p>Capture student, course, and backup selections in one smooth step.</p>
+        </div>
+        <div class="header-links">
+          <a class="action-link" routerLink="/dashboard">Dashboard</a>
+          <a class="action-link secondary" routerLink="/enrollments">View enrollments</a>
+        </div>
       </div>
+    </div>
+
+
+    @if (submitted()) {
+    <div class="success">
+      <strong>Enrollment submitted.</strong>
+      <span>Redirecting you to the enrollment list…</span>
+    </div>
+    } @else {
+    <form class="enrollment-form" [formGroup]="form" (ngSubmit)="submit()">
+      <div class="form-grid">
+        <label class="field" for="studentId">
+          <span>Student ID</span>
+          <input id="studentId" formControlName="studentId" placeholder="e.g. TMS-1234-5678" />
+          @if (form.controls.studentId.touched && form.controls.studentId.invalid) {
+          <span class="error">Enter a valid Student ID (format: TMS-0000-0000)</span>
+          }
+        </label>
+
+        <label class="field" for="courseId">
+          <span>Course ID</span>
+          <input id="courseId" formControlName="courseId" placeholder="e.g. CSE-101" />
+          @if (form.controls.courseId.touched && form.controls.courseId.invalid) {
+          <span class="error">Course ID is required</span>
+          }
+        </label>
+
+        <label class="field" for="term">
+          <span>Term</span>
+          <input id="term" formControlName="term" />
+        </label>
+      </div>
+
+      <label class="field" for="notes">
+        <span>Notes (optional)</span>
+        <textarea id="notes" formControlName="notes" rows="4"></textarea>
+      </label>
+
+      <div class="backup-section">
+        <div class="section-heading">
+          <h3>Backup Courses</h3>
+          <button type="button" class="ghost-button" (click)="addBackup()">Add backup course</button>
+        </div>
+
+        @for (backup of backups.controls; track $index) {
+        <div class="backup-row">
+          <input [formControl]="backup" [placeholder]="'Backup course ' + ($index + 1)" />
+          <button type="button" class="remove-button" (click)="removeBackup($index)">Remove</button>
+        </div>
+        }
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="primary-button" [disabled]="form.invalid">Confirm Enrollment</button>
+      </div>
+    </form>
     }
-
-    <button type="button" (click)="addBackup()">Add Backup Course</button>
-
-    <hr />
-    <button type="submit" [disabled]="form.invalid">Confirm Enrollment</button>
-  </form>
-}
+  </div>
+</section>
