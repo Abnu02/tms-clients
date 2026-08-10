@@ -6,14 +6,14 @@ import {
   ReactiveFormsModule,
   FormArray,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { EnrollmentStore } from '../../store/enrollment.store';
 import { CreateEnrollmentPayload } from '../../models/enrollment.model';
 
 @Component({
   selector: 'app-enrollment-form',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './enrollment-form.html',
   styleUrl: './enrollment-form.scss',
 })
@@ -25,10 +25,7 @@ export class EnrollmentForm {
   submitted = signal(false);
 
   form = this.fb.nonNullable.group({
-    studentId: [
-      '',
-      [Validators.required, Validators.pattern('^TMS-[0-9]{4}-[0-9]{4}$')],
-    ],
+    studentId: ['', [Validators.required, Validators.pattern('^TMS-[0-9]{4}-[0-9]{4}$')]],
     courseId: ['', Validators.required],
     term: ['Fall 2026', Validators.required],
     notes: [''],
@@ -40,9 +37,7 @@ export class EnrollmentForm {
   }
 
   addBackup() {
-    this.backups.push(
-      this.fb.control('', { nonNullable: true, validators: Validators.required }),
-    );
+    this.backups.push(this.fb.control('', { nonNullable: true, validators: Validators.required }));
   }
 
   removeBackup(index: number) {

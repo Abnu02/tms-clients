@@ -1,0 +1,82 @@
+<section class="dashboard-shell">
+  <header class="dashboard-header">
+    <div class="hero-copy">
+      <p class="eyebrow">Instructor overview</p>
+      <h1>Enrollment command center</h1>
+      <p class="hero-description">
+        Monitor active enrollments, spot pending work, and keep your course pipelines moving.
+      </p>
+    </div>
+    <div class="hero-actions">
+      <a class="action-link" routerLink="/enroll">Create enrollment</a>
+      <a class="action-link secondary" routerLink="/enrollments">View all enrollments</a>
+    </div>
+  </header>
+
+  <div class="kpi-row">
+    <article class="kpi-card primary">
+      <span class="kpi-value">{{ store.entities().length }}</span>
+      <span class="kpi-label">Total enrollments</span>
+    </article>
+    <article class="kpi-card warning">
+      <span class="kpi-value">{{ store.pendingCount() }}</span>
+      <span class="kpi-label">Pending approval</span>
+    </article>
+    <article class="kpi-card success">
+      <span class="kpi-value">{{ store.entities().filter((entry) => entry.status === 'Approved').length }}</span>
+      <span class="kpi-label">Approved this term</span>
+    </article>
+  </div>
+
+  <div class="dashboard-grid">
+    <section class="panel analytics-panel">
+      <div class="panel-heading">
+        <div>
+          <p class="panel-label">Performance snapshot</p>
+          <h2>Enrollment progress</h2>
+        </div>
+        <span class="panel-pill">Updated live</span>
+      </div>
+
+      <div class="chart-section">
+        @defer (on viewport; prefetch on idle(500)) {
+        <app-analytics-chart [data]="store.entities()" />
+        } @placeholder {
+        <div class="skeleton-chart">Scroll down to view analytics...</div>
+        } @loading (minimum 500ms) {
+        <div class="spinner">Loading dashboard insights...</div>
+        } @error {
+        <p class="error-state">Failed to load chart. Check your connection.</p>
+        }
+      </div>
+    </section>
+
+    <aside class="panel activity-panel">
+      <div class="panel-heading">
+        <div>
+          <p class="panel-label">Next up</p>
+          <h2>Priority queue</h2>
+        </div>
+      </div>
+
+      @if (store.entities().length === 0) {
+      <div class="empty-state">
+        <p>No enrollments available yet.</p>
+        <span>New requests will appear here as they arrive.</span>
+      </div>
+      } @else {
+      <ul class="activity-list">
+        @for (entry of store.entities().slice(0, 4); track entry.id) {
+        <li class="activity-item">
+          <div>
+            <strong>{{ entry.studentName }}</strong>
+            <p>{{ entry.courseName }}</p>
+          </div>
+          <span class="status-pill {{ entry.status.toLowerCase() }}">{{ entry.status }}</span>
+        </li>
+        }
+      </ul>
+      }
+    </aside>
+  </div>
+</section>
