@@ -8,7 +8,7 @@ import { Course, CourseDetail, PagedResponse } from '../models/course.model';
 })
 export class CourseService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:5287/api/courses';
+  private baseUrl = '/api/courses';
 
   getAll(page = 1, pageSize = 50) {
     return this.http
