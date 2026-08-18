@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Course, CourseDetail, PagedResponse } from '../models/course.model';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Service()
 export class CourseService {
@@ -19,5 +20,8 @@ export class CourseService {
 
   getById(id: string) {
     return this.http.get<CourseDetail>(`${this.base}/${id}`);
+  }
+  deleteCourse(id: number): Observable<void> {
+    return this.http.delete<void>(`/api/courses/${id}`);
   }
 }
