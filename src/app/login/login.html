@@ -1,64 +1,94 @@
-<div class="login-container">
-  <form [formGroup]="loginForm" (ngSubmit)="login()" class="login-form">
-    <h2>Login</h2>
+<div class="login-wrapper">
+  <div class="login-card">
+    <div class="card-header">
+      <div class="brand-badge">⚡ TMS Security</div>
+      <h1>Sign In to Portal</h1>
+      <p class="subtitle">Access courses, enrollments, and academic dashboard</p>
+    </div>
 
     @if (errorMessage) {
-      <div class="error-message">
-        {{ errorMessage }}
+      <div class="alert alert-danger">
+        <span class="alert-icon">⚠️</span>
+        <div class="alert-text">
+          {{ errorMessage }}
+          @if (rateLimitCountdown > 0) {
+            <div class="countdown">Cooldown remaining: <strong>{{ rateLimitCountdown }}s</strong></div>
+          }
+        </div>
       </div>
     }
 
-    <div class="form-group">
-      <label for="username">Username</label>
+    <form [formGroup]="loginForm" (ngSubmit)="login()" class="login-form">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="name@university.edu"
+          autocomplete="email"
+          [disabled]="loading || rateLimitCountdown > 0"
+        />
+        @if (loginForm.controls.email.touched && loginForm.controls.email.invalid) {
+          <small class="field-error">Please enter a valid email address.</small>
+        }
+      </div>
 
-      <input
-        id="username"
-        type="text"
-        formControlName="username"
-        placeholder="Enter your username"
-        autocomplete="username"
-      />
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="••••••••••••"
+          autocomplete="current-password"
+          [disabled]="loading || rateLimitCountdown > 0"
+        />
+        @if (loginForm.controls.password.touched && loginForm.controls.password.invalid) {
+          <small class="field-error">Password is required.</small>
+        }
+      </div>
 
-      @if (
-        loginForm.controls.username.touched &&
-        loginForm.controls.username.invalid
-      ) {
-        <small class="field-error">
-          Username is required.
-        </small>
-      }
+      <button
+        type="submit"
+        class="btn-primary"
+        [disabled]="loading || loginForm.invalid || rateLimitCountdown > 0"
+      >
+        @if (loading) {
+          <span class="spinner-small"></span> Signing In...
+        } @else {
+          Sign In →
+        }
+      </button>
+    </form>
+
+    <div class="quick-fill-section">
+      <div class="divider">
+        <span>Quick-fill test accounts</span>
+      </div>
+      <div class="chip-grid">
+        <button
+          type="button"
+          class="demo-chip chip-admin"
+          (click)="quickFill('admin@tms.com', 'Admin')"
+        >
+          <span class="chip-role">Admin</span> admin&#64;tms.com
+        </button>
+        <button
+          type="button"
+          class="demo-chip chip-instructor"
+          (click)="quickFill('instructor@tms.com', 'Instructor')"
+        >
+          <span class="chip-role">Instructor</span> instructor&#64;tms.com
+        </button>
+        <button
+          type="button"
+          class="demo-chip chip-student"
+          (click)="quickFill('student@tms.com', 'Student')"
+        >
+          <span class="chip-role">Student</span> student&#64;tms.com
+        </button>
+      </div>
     </div>
-
-    <div class="form-group">
-      <label for="password">Password</label>
-
-      <input
-        id="password"
-        type="password"
-        formControlName="password"
-        placeholder="Enter your password"
-        autocomplete="current-password"
-      />
-
-      @if (
-        loginForm.controls.password.touched &&
-        loginForm.controls.password.invalid
-      ) {
-        <small class="field-error">
-          Password is required.
-        </small>
-      }
-    </div>
-
-    <button
-      type="submit"
-      [disabled]="loading || loginForm.invalid"
-    >
-      @if (loading) {
-        Logging in...
-      } @else {
-        Login
-      }
-    </button>
-  </form>
+  </div>
 </div>

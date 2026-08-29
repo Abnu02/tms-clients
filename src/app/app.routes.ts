@@ -1,4 +1,7 @@
 import { Routes } from '@angular/router';
+import { roleGuard } from './guards/role.guard';
+import { AdminCourseListComponent } from './features/admin-course-list/admin-course-list.component';
+import { UnauthorizedComponent } from './features/unauthorized/unauthorized.component';
 
 export const routes: Routes = [
 
@@ -10,8 +13,15 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     loadComponent: () =>
-      import('./features/instructor-dashboard/instructor-dashboard.component').then(
-        (m) => m.InstructorDashboardComponent,
+      import('./features/dashboard-host/dashboard-host.component').then(
+        (m) => m.DashboardHostComponent,
+      ),
+  },
+  {
+    path: 'courses',
+    loadComponent: () =>
+      import('./features/student-dashboard/student-dashboard.component').then(
+        (m) => m.StudentDashboardComponent,
       ),
   },
   {
@@ -43,5 +53,14 @@ export const routes: Routes = [
       import('./features/grade-submission/grade-submission.component').then(
         (m) => m.GradeSubmissionComponent,
       ),
+  },
+  {
+    path: 'admin/courses',
+    component: AdminCourseListComponent,
+    canActivate: [roleGuard('Admin')],
+  },
+  {
+    path: 'unauthorized',
+    component: UnauthorizedComponent,
   },
 ];

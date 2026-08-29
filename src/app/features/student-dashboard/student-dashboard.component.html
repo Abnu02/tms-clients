@@ -1,14 +1,66 @@
-<h2>Course Catalog</h2>
-@if (coursesResource.isLoading()) {
-<div class="spinner">Fetching courses from the server...</div>
-} @else if (coursesResource.error()) {
-<div class="error">Could not load courses. Make sure your .NET API is running.</div>
-} @else {
-<div class="grid">
-  @for (course of coursesResource.value()!; track course.id) {
-  <tms-course-card [course]="course" (enrollClicked)="handleEnroll($event)" />
-  } @empty {
-  <p>No courses are available this term.</p>
+<div class="student-dashboard-shell">
+  <!-- Student Summary Banner -->
+  <div class="student-hero">
+    <div class="hero-left">
+      <h2>Welcome to Course Portal</h2>
+      <p class="hero-sub">Explore available training courses, track your graduation progress, and register online.</p>
+    </div>
+    <div class="credit-tracker-card">
+      <div class="credit-header">
+        <span class="credit-label">Degree Completion</span>
+        <strong class="credit-num">{{ earnedCredits() }} / 120 Credits</strong>
+      </div>
+      <div class="credit-bar">
+        <div class="credit-fill" [style.width.%]="graduationProgress()"></div>
+      </div>
+      <span class="status-tag">{{ graduationStatus() }}</span>
+    </div>
+  </div>
+
+  <!-- Search & Catalog Header -->
+  <div class="catalog-header">
+    <div>
+      <h3>Available Courses Catalog</h3>
+      <p class="catalog-sub">Click Enroll to register or click a title for detailed syllabus.</p>
+    </div>
+    <div class="search-box">
+      <input
+        type="text"
+        placeholder="Filter by title or code (e.g. CSE-101)..."
+        [(ngModel)]="searchQuery"
+      />
+    </div>
+  </div>
+
+  <!-- Course Card Grid -->
+  @if (coursesResource.isLoading()) {
+    <div class="loading-state">
+      <span class="spinner"></span> Loading active course offerings...
+    </div>
+  } @else if (coursesResource.error()) {
+    <div class="error-state">
+      ⚠️ Could not connect to API server. Ensure backend is running.
+    </div>
+  } @else {
+    <div class="course-grid">
+      @for (course of filteredCourses(); track course.id) {
+        <div class="card-wrapper">
+          <tms-course-card [course]="course" (enrollClicked)="handleEnroll($event)" />
+
+          <!-- Conditional Admin Only Action -->
+          @if (auth.hasRole('Admin')) {
+            <div class="admin-actions">
+              <button type="button" class="btn-delete" (click)="deleteCourse(course.id)">
+                🗑️ Delete Course (Admin)
+              </button>
+            </div>
+          }
+        </div>
+      } @empty {
+        <div class="empty-state">
+          <p>No matching courses found for "{{ searchQuery() }}".</p>
+        </div>
+      }
+    </div>
   }
 </div>
-}

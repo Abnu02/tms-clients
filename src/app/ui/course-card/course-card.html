@@ -1,21 +1,37 @@
-<div class="card">
-  <h3>
+<div class="course-card">
+  <div class="card-top">
+    <span class="code-pill">{{ course().code }}</span>
+    <span class="status-pill" [class.is-full]="course().enrollmentCount >= course().maxCapacity">
+      {{ course().enrollmentCount >= course().maxCapacity ? 'Full' : 'Open' }}
+    </span>
+  </div>
+
+  <h3 class="course-title">
     <a [routerLink]="['/courses', course().id]">{{ course().title }}</a>
-    ({{ course().code }})
   </h3>
-  <p>Enrolled {{ course().enrollmentCount }} of {{ course().maxCapacity }} seats</p>
-  <span class="badge" [class.closed]="course().enrollmentCount >= course().maxCapacity">
-    {{
-      course().enrollmentCount >= course().maxCapacity
-        ? 'Full'
-        : 'Accepting
-enrollments'
-    }}
-  </span>
-  <button
-    (click)="enrollClicked.emit(course())"
-    [disabled]="course().enrollmentCount >= course().maxCapacity"
-  >
-    Enroll
-  </button>
+
+  <div class="capacity-info">
+    <div class="capacity-numbers">
+      <span>Seats Filled</span>
+      <strong>{{ course().enrollmentCount || 0 }} / {{ course().maxCapacity }}</strong>
+    </div>
+    <div class="capacity-meter">
+      <div
+        class="capacity-fill"
+        [style.width.%]="(course().enrollmentCount || 0) / course().maxCapacity * 100"
+        [class.is-danger]="course().enrollmentCount >= course().maxCapacity"
+      ></div>
+    </div>
+  </div>
+
+  <div class="card-footer">
+    <button
+      type="button"
+      class="btn-enroll"
+      (click)="enrollClicked.emit(course())"
+      [disabled]="course().enrollmentCount >= course().maxCapacity"
+    >
+      {{ course().enrollmentCount >= course().maxCapacity ? 'Waitlist Only' : 'Enroll Now →' }}
+    </button>
+  </div>
 </div>
